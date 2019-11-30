@@ -1,5 +1,17 @@
 package es.iessaladillo.pedrojoya.pr04.ui.main
 
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.FragmentContainerView
+import androidx.recyclerview.widget.RecyclerView
+import es.iessaladillo.pedrojoya.pr04.R
+import es.iessaladillo.pedrojoya.pr04.data.entity.Task
+import es.iessaladillo.pedrojoya.pr04.utils.invisibleUnless
+import es.iessaladillo.pedrojoya.pr04.utils.strikeThrough
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.tasks_activity_item.*
+
 // TODO: Crea una clase TasksActivityAdapter que actúe como adaptador del RecyclerView
 //  y que trabaje con una lista de tareas.
 //  Cuando se haga click sobre un elemento se debe cambiar el estado de completitud
@@ -11,3 +23,46 @@ package es.iessaladillo.pedrojoya.pr04.ui.main
 //  Si la tarea está completada, el checkBox estará chequeado y el concepto estará tachado.
 
 
+class TasksActivityAdapter: RecyclerView.Adapter<TasksActivityAdapter.ViewHolder>() {
+
+    private var data: List<Task> = emptyList()
+
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val itemView = layoutInflater.inflate(R.layout.tasks_activity_item, parent, false)
+        return ViewHolder(itemView)
+    }
+
+    override fun getItemId(position: Int): Long = data[position].id
+
+    override fun getItemCount() = data.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(data[position])
+    }
+
+    fun submitList(newData: List<Task>){
+        data = newData
+        notifyDataSetChanged()
+    }
+
+    class ViewHolder(override val containerView: View): RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        fun bind(item: Task){
+            lblConcept.setText(item.concep)
+            if (item.completed){
+                lblConcept.strikeThrough(true)
+                viewBar.invisibleUnless(item.completed)
+            }else{
+                //cambiar dependiendo si esta completa o no
+                lblConcept.strikeThrough(false)
+            }
+        }
+
+    }
+}

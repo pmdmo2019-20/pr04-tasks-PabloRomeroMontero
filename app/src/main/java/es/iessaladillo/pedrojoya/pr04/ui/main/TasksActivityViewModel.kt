@@ -15,7 +15,7 @@ class TasksActivityViewModel(private val repository: Repository,
 
     // Estado de la interfaz
 
-    private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
+    private val _tasks: MutableLiveData<List<Task>> = MutableLiveData(emptyList())
     val tasks: LiveData<List<Task>>
         get() = _tasks
 
@@ -127,6 +127,7 @@ class TasksActivityViewModel(private val repository: Repository,
     // Retorna si el concepto recibido es válido (no es una cadena vacía o en blanco)
     fun isValidConcept(concept: String): Boolean {
         // TODO
+        return true
     }
 
     // Pide las tareas al repositorio, atendiendo al filtro recibido
