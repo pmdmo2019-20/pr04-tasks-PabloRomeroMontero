@@ -15,9 +15,11 @@ class TasksActivityViewModel(private val repository: Repository,
 
     // Estado de la interfaz
 
-    private val _tasks: MutableLiveData<List<Task>> = MutableLiveData(emptyList())
+    private val _tasks: MutableLiveData<List<Task>> = MutableLiveData(repository.queryAllTasks())
     val tasks: LiveData<List<Task>>
-        get() = _tasks
+        get() {
+            return MutableLiveData<List<Task>>(repository.queryAllTasks())
+        }
 
     private val _currentFilter: MutableLiveData<TasksActivityFilter> =
         MutableLiveData(TasksActivityFilter.ALL)
@@ -73,17 +75,17 @@ class TasksActivityViewModel(private val repository: Repository,
     // mostrar en el RecyclerView la lista con todas las tareas, no sólo
     // las completadas.
     fun addTask(concept: String) {
-        // TODO
+        repository.addTask(concept)
     }
 
     // Agrega la tarea
     fun insertTask(task: Task) {
-        // TODO
+
     }
 
     // Borra la tarea
     fun deleteTask(task: Task) {
-        // TODO
+        repository.deleteTask(task.id)
     }
 
     // Borra todas las tareas mostradas actualmente en el RecyclerView.

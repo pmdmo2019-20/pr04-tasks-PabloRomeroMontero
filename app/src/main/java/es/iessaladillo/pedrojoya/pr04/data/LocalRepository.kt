@@ -11,12 +11,14 @@ import es.iessaladillo.pedrojoya.pr04.data.entity.Task
 
 object LocalRepository: Repository {
 
-    private var task: List<Task> = emptyList()
+    private var task:  MutableList<Task> = mutableListOf(
+        Task(1, "Prueba", false),
+        Task(2,"prueba 2 hermano", false),
+        Task(2,"prueba 3 brá", true)
+    )
 
 
-    override fun queryAllTasks(): List<Task> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun queryAllTasks(): List<Task> = task
 
     override fun queryCompletedTasks(): List<Task> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -27,7 +29,7 @@ object LocalRepository: Repository {
     }
 
     override fun addTask(concept: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        task.add(Task((task.size+1).toLong(),concept,false))
     }
 
     override fun insertTask(task: Task) {
@@ -35,7 +37,7 @@ object LocalRepository: Repository {
     }
 
     override fun deleteTask(taskId: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        task.
     }
 
     override fun deleteTasks(taskIdList: List<Long>) {

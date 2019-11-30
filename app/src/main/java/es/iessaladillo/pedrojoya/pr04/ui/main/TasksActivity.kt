@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,9 @@ class TasksActivity : AppCompatActivity() {
 
     private fun setupViews() {
         setupRecyclerView()
+        imgAddTask.setOnClickListener {
+            viewModel.addTask(txtConcept.text.toString())
+        }
     }
 
     private fun setupRecyclerView() {
@@ -56,7 +60,14 @@ class TasksActivity : AppCompatActivity() {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(DividerItemDecoration(this@TasksActivity, RecyclerView.VERTICAL))
             adapter = listAdapter
+
+            //ListenerItems
+            setOnSwipeListener { viewHolder, _ ->
+                viewModel.deleteTask(listAdapter.getItem(viewHolder.adapterPosition))
+            }
+
         }
+
     }
 
 

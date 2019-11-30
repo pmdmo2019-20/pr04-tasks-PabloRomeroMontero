@@ -40,6 +40,9 @@ class TasksActivityAdapter: RecyclerView.Adapter<TasksActivityAdapter.ViewHolder
 
     override fun getItemId(position: Int): Long = data[position].id
 
+
+    fun getItem(position: Int): Task = data[position]
+
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -52,7 +55,6 @@ class TasksActivityAdapter: RecyclerView.Adapter<TasksActivityAdapter.ViewHolder
     }
 
     class ViewHolder(override val containerView: View): RecyclerView.ViewHolder(containerView), LayoutContainer {
-
         fun bind(item: Task){
             lblConcept.setText(item.concep)
             if (item.completed){
