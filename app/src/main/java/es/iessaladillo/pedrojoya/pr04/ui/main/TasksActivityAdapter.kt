@@ -71,16 +71,15 @@ class TasksActivityAdapter: RecyclerView.Adapter<TasksActivityAdapter.ViewHolder
             }
         }
 
-        @SuppressLint("ResourceAsColor")
         fun bind(item: Task){
             lblConcept.text = item.concep
             if (item.completed){
                 lblConcept.strikeThrough(true)
-                viewBar.setBackgroundColor( R.color.colorCompletedTask)
+                viewBar.setBackgroundColor( Color.parseColor("#00574B"))
                 lblCompleted.text = item.completedAt
                 chkCompleted.isChecked = true
             }else{
-                viewBar.setBackgroundColor( R.color.colorPendingTask)
+                viewBar.setBackgroundColor( Color.parseColor("#008577"))
                 lblConcept.strikeThrough(false)
                 lblCompleted.text = item.createdAt
                 chkCompleted.isChecked = false

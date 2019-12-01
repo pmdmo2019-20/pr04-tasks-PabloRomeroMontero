@@ -3,10 +3,7 @@ package es.iessaladillo.pedrojoya.pr04.data
 import androidx.lifecycle.MutableLiveData
 import es.iessaladillo.pedrojoya.pr04.data.entity.Task
 
-// TODO: Crea una clase llamada LocalRepository que implemente la interfaz Repository
-//  usando una lista mutable para almacenar las tareas.
-//  Los id de las tareas se irán generando secuencialmente a partir del valor 1 conforme
-//  se van agregando tareas (add).
+
 
 object LocalRepository: Repository {
 
@@ -33,22 +30,33 @@ object LocalRepository: Repository {
         return taskPendingList
     }
 
-    fun createNewIdAllList(){
-        var count = 1L
-        taskList.forEach {
-            it.id = count
-            count++
+    fun createNewIdAllList(): Long{
+        var id: Long = 1L
+        val idList: MutableList<Long> = mutableListOf()
+        if (taskList.isNotEmpty()){
+            taskList.forEach {
+                idList.add(it.id)
+            }
+            idList.forEach {
+                if (id == it){
+                    id++
+                }else{
+                    return id
+                }
+
+            }
         }
+        return id
+
     }
 
     override fun addTask(concept: String) {
-        taskList.add(Task(0,concept,false))
-        createNewIdAllList()
+        taskList.add(Task(createNewIdAllList(),concept,false))
     }
 
     override fun insertTask(task: Task) {
+        task.id = createNewIdAllList()
          taskList.add(task)
-        createNewIdAllList()
     }
 
     override fun deleteTask(taskId: Long) {
@@ -60,14 +68,12 @@ object LocalRepository: Repository {
         }
 
         taskList.remove(taskRemove)
-        createNewIdAllList()
     }
 
     override fun deleteTasks(taskIdList: List<Long>) {
             taskIdList.forEach{
                     deleteTask(it)
         }
-        createNewIdAllList()
     }
 
     override fun markTaskAsCompleted(taskId: Long) {

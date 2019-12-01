@@ -66,10 +66,11 @@ class TasksActivity : AppCompatActivity() {
                 viewModel.addTask(txtConcept.text.toString())
             else
                 Snackbar.make(
-                    clRoot, getString(R.string.concept_task_empty),
+                    lstTasks, getString(R.string.concept_task_empty),
                     Snackbar.LENGTH_SHORT
-                )
+                ).show()
             it.hideKeyboard()
+            txtConcept.setText("")
         }
     }
 
