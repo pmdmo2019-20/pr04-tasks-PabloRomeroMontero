@@ -1,6 +1,5 @@
 package es.iessaladillo.pedrojoya.pr04.data
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import es.iessaladillo.pedrojoya.pr04.data.entity.Task
 
@@ -11,53 +10,89 @@ import es.iessaladillo.pedrojoya.pr04.data.entity.Task
 
 object LocalRepository: Repository {
 
-    private var task:  MutableList<Task> = mutableListOf(
-        Task(1, "Prueba", false),
-        Task(2,"prueba 2 hermano", false),
-        Task(2,"prueba 3 brá", true)
-    )
+    private val taskList:  MutableList<Task> = mutableListOf()
 
-
-    override fun queryAllTasks(): List<Task> = task
+    override fun queryAllTasks(): List<Task> = taskList
 
     override fun queryCompletedTasks(): List<Task> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val taskCompletedList: MutableList<Task> = mutableListOf()
+
+        taskList.forEach {
+            if ( it.completed)
+                taskCompletedList.add(it)
+        }
+        return taskCompletedList
     }
 
     override fun queryPendingTasks(): List<Task> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val taskPendingList: MutableList<Task> =  mutableListOf()
+        taskList.forEach {
+            if (!it.completed)
+                taskPendingList.add(it)
+        }
+        return taskPendingList
+    }
+
+    fun createNewIdAllList(){
+        var count = 1L
+        taskList.forEach {
+            it.id = count
+            count++
+        }
     }
 
     override fun addTask(concept: String) {
-        task.add(Task((task.size+1).toLong(),concept,false))
+        taskList.add(Task(0,concept,false))
+        createNewIdAllList()
     }
 
     override fun insertTask(task: Task) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+         taskList.add(task)
+        createNewIdAllList()
     }
 
     override fun deleteTask(taskId: Long) {
-        task.
+       var taskRemove: Task? = null
+
+        taskList.forEach {
+            if ( it.id == taskId)
+                taskRemove = it
+        }
+
+        taskList.remove(taskRemove)
+        createNewIdAllList()
     }
 
     override fun deleteTasks(taskIdList: List<Long>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            taskIdList.forEach{
+                    deleteTask(it)
+        }
+        createNewIdAllList()
     }
 
     override fun markTaskAsCompleted(taskId: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        taskList.forEach {
+            if ( it.id == taskId && it.completed)
+                it.cambiarEstado()
+        }
     }
 
     override fun markTasksAsCompleted(taskIdList: List<Long>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        taskIdList.forEach{
+            markTaskAsCompleted(it)
+        }    }
 
     override fun markTaskAsPending(taskId: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        taskList.forEach {
+            if ( it.id == taskId && !it.completed)
+                it.cambiarEstado()
+        }
     }
 
     override fun markTasksAsPending(taskIdList: List<Long>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        taskIdList.forEach{
+            markTaskAsPending(it)
+        }
     }
 
 }

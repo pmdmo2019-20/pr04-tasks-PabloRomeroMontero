@@ -24,13 +24,21 @@ import es.iessaladillo.pedrojoya.pr04.utils.hideKeyboard
 import es.iessaladillo.pedrojoya.pr04.utils.invisibleUnless
 import es.iessaladillo.pedrojoya.pr04.utils.setOnSwipeListener
 import kotlinx.android.synthetic.main.tasks_activity.*
+import kotlinx.android.synthetic.main.tasks_activity_item.*
 
 
 class TasksActivity : AppCompatActivity() {
-    private val listAdapter: TasksActivityAdapter = TasksActivityAdapter()
+    private val listAdapter: TasksActivityAdapter = TasksActivityAdapter().apply {
+        setOnItemListener(object: OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                viewModel.updateTaskCompletedState(getItem(position),getItem(position).completed)
+            }
+        })
+
+    }
     private var mnuFilter: MenuItem? = null
     private val viewModel: TasksActivityViewModel by lazy {
-        ViewModelProvider(this,TasksActivityViewModelFactory(LocalRepository,application))
+        ViewModelProvider(this, TasksActivityViewModelFactory(LocalRepository, application))
             .get(TasksActivityViewModel::class.java)
     }
 
@@ -42,14 +50,26 @@ class TasksActivity : AppCompatActivity() {
     }
 
     private fun observeTask() {
-        viewModel.tasks.observe(this) {showTasks(it)}
+        viewModel.tasks.observe(this) { showTasks(it) }
+        viewModel.onShowMessage.observeEvent(this) { Snackbar.make(lstTasks, it, Snackbar.LENGTH_LONG).show() }
+        viewModel.onStartActivity.observeEvent(this) {startActivity(it)}
+        viewModel.currentFilterMenuItemId.observe(this) {
+            checkMenuItem(it)
+        }
     }
 
 
     private fun setupViews() {
         setupRecyclerView()
         imgAddTask.setOnClickListener {
-            viewModel.addTask(txtConcept.text.toString())
+            if (viewModel.isValidConcept(txtConcept.text.toString()))
+                viewModel.addTask(txtConcept.text.toString())
+            else
+                Snackbar.make(
+                    clRoot, getString(R.string.concept_task_empty),
+                    Snackbar.LENGTH_SHORT
+                )
+            it.hideKeyboard()
         }
     }
 
@@ -63,11 +83,19 @@ class TasksActivity : AppCompatActivity() {
 
             //ListenerItems
             setOnSwipeListener { viewHolder, _ ->
-                viewModel.deleteTask(listAdapter.getItem(viewHolder.adapterPosition))
+                deleteTaskk(listAdapter.getItem(viewHolder.adapterPosition))
             }
-
         }
+    }
 
+    private fun deleteTaskk(task: Task) {
+        viewModel.deleteTask(task)
+        Snackbar.make(
+            lstTasks, getString(R.string.tasks_task_deleted, task.concep),
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(getString(R.string.tasks_recreate)) { viewModel.insertTask(task) }
+            .show()
     }
 
 
@@ -91,14 +119,14 @@ class TasksActivity : AppCompatActivity() {
         return true
     }
 
-//    private fun checkMenuItem(@MenuRes menuItemId: Int) {
-//        lstTasks.post {
-//            val item = mnuFilter.findItem(menuItemId)
-//            item?.let { menuItem ->
-//                menuItem.isChecked = true
-//            }
-//        }
-//    }
+    private fun checkMenuItem(@MenuRes menuItemId: Int) {
+        lstTasks.post {
+            val item = mnuFilter?.subMenu?.findItem(menuItemId)
+            item?.let { menuItem: MenuItem ->
+                menuItem.isChecked = true
+            }
+        }
+    }
 
     private fun showTasks(tasks: List<Task>) {
         lstTasks.post {

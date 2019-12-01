@@ -16,12 +16,13 @@
     <string name="tasks_title_pending">Tasks (pending)</string>
     <string name="tasks_title_completed">Tasks (completed)</string>
     <string name="tasks_mnuDelete">Delete all</string>
-    <string name="tasks_mnuComplete">Mark all as completed</string>
-    <string name="tasks_mnuPending">Mark all as pending</string>
+    <string name="tasks_mnuComplete">Mark all as pending</string>
+    <string name="tasks_mnuPending">Mark all as complete</string>
     <string name="tasks_no_tasks_to_delete">No tasks to delete</string>
     <string name="tasks_no_tasks_to_share">No tasks to share</string>
     <string name="tasks_no_pending_tasks_yet">No pending tasks yet</string>
     <string name="tasks_no_completed_tasks_yet">No completed tasks yet</string>
     <string name="tasks_no_tasks_to_mark_as_completed">No tasks to mark as completed</string>
     <string name="tasks_no_tasks_to_mark_as_pending">No tasks to mark as pending</string>
+    <string name="concept_task_empty">ERROR: Concept Task is Empty</string>
 </resources>
