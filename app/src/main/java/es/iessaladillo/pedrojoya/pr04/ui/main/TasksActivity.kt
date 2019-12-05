@@ -61,6 +61,7 @@ class TasksActivity : AppCompatActivity() {
 
     private fun setupViews() {
         setupRecyclerView()
+
         imgAddTask.setOnClickListener {
             if (viewModel.isValidConcept(txtConcept.text.toString()))
                 viewModel.addTask(txtConcept.text.toString())
@@ -135,6 +136,7 @@ class TasksActivity : AppCompatActivity() {
             lblEmptyView.invisibleUnless(tasks.isEmpty())
         }
     }
+
 
 }
 
